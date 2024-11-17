@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect, useCallback } from "react";
 import PrayerTimes from "./components/PrayerTimes";
 import Countdown from "./components/Countdown";
@@ -83,7 +84,7 @@ function App() {
         <p>الوقت الحالي: {currentTime.toLocaleTimeString()}</p>
         <p>التاريخ الميلادي: {currentTime.toLocaleDateString()}</p>
       </div>
-
+{/*  
       <Settings
         city={city}
         setCity={setCity}
@@ -92,14 +93,15 @@ function App() {
         method={method}
         setMethod={setMethod}
       />
+      */}
 
       {loading ? (
         <p>جاري تحميل مواقيت الصلاة...</p>
       ) : (
         <>
-          <PrayerRow prayerTimes={prayerTimes} /> {/* عرض الصلوات بشكل أفقي */}
+          <PrayerRow prayerTimes={prayerTimes} /> {/* عرض الصلوات بشكل أفقي  <PrayerTimes prayerTimes={prayerTimes} />*/}
           <Countdown nextPrayerTime={nextPrayerTime} iqamaTime={iqamaTime} />
-          <PrayerTimes prayerTimes={prayerTimes} />
+           
         </>
       )}
     </div>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import '../styles/Countdown.css';
 
 function Countdown({ nextPrayerTime, iqamaTime }) {
   const [timeLeft, setTimeLeft] = useState('');
