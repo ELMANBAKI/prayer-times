@@ -1,22 +1,22 @@
-import React from 'react';
-import './PrayerRow.css';
+import React from "react";
+import "./PrayerRow.css"; // تأكد من أنك أضفت هذا الملف
 
 function PrayerRow({ prayerTimes }) {
   const prayers = [
-    { name: 'الفجر', time: prayerTimes.Fajr, img: '/images/fajr.png' },
-    { name: 'الظهر', time: prayerTimes.Dhuhr, img: '/images/dhuhr.png' },
-    { name: 'العصر', time: prayerTimes.Asr, img: '/images/asr.png' },
-    { name: 'المغرب', time: prayerTimes.Maghrib, img: '/images/maghrib.png' },
-    { name: 'العشاء', time: prayerTimes.Isha, img: '/images/isha.png' },
+    { name: "الفجر", time: prayerTimes.Fajr, img: "../images/FAJRE.jpg" },
+    { name: "الظهر", time: prayerTimes.Dhuhr, img: "../images/ADOUHR.jpg" },
+    { name: "العصر", time: prayerTimes.Asr, img: "../images/ALASR.jpg" },
+    { name: "المغرب", time: prayerTimes.Maghrib, img: "../images/MAGHRIB.jpg" },
+    { name: "العشاء", time: prayerTimes.Isha, img: "../images/ICHAA.jpg" },
   ];
 
   return (
-    <div className="prayer-row">
-      {prayers.map((prayer) => (
-        <div className="prayer-card" key={prayer.name}>
-          <img src={prayer.img} alt={prayer.name} className="prayer-image" />
-          <h3 className="prayer-name">{prayer.name}</h3>
-          <p className="prayer-time">{prayer.time}</p>
+    <div className="prayer-row-container">
+      {prayers.map((prayer, index) => (
+        <div key={index} className="prayer-item">
+          <img src={prayer.img} alt={prayer.name} />
+          <h3>{prayer.name}</h3>
+          <p>{prayer.time || "—"}</p>
         </div>
       ))}
     </div>
@@ -24,3 +24,4 @@ function PrayerRow({ prayerTimes }) {
 }
 
 export default PrayerRow;
+
