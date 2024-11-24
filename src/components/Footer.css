@@ -1,0 +1,18 @@
+.footer {
+    background-color: #222; /* لون خلفية داكن */
+    color: #fff; /* لون النص */
+    padding: 2px;
+    text-align: center;
+  }
+  
+   
+  
+  
+
+  @media (max-width: 768px) {
+    .footer-links {
+      flex-direction: column;
+      gap: 10px;
+    }
+  }
+  

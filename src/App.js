@@ -1,22 +1,31 @@
-/* eslint-disable no-unused-vars */
 import React, { useState, useEffect, useCallback } from "react";
+import { BrowserRouter as Router, Routes, Route, } from "react-router-dom";
 import PrayerTimes from "./components/PrayerTimes";
 import Countdown from "./components/Countdown";
 import Settings from "./components/Settings";
-import PrayerRow from "./components/PrayerRow"; // استيراد مكون PrayerRow
+import PrayerRow from "./components/PrayerRow"; 
+import AdhanSettings from "./components/AdhanSettings"; // صفحة إعدادات الأذان
+import Footer from "./components/Footer"; // استيراد التذييل
 import "./styles/App.css";
 
 function App() {
   const [city, setCity] = useState("الرباط");
   const [country, setCountry] = useState("المغرب");
-  const [method, setMethod] = useState(5); // الطريقة الافتراضية
+  const [method, setMethod] = useState(5);
   const [prayerTimes, setPrayerTimes] = useState({});
   const [hijriDate, setHijriDate] = useState("");
   const [nextPrayerTime, setNextPrayerTime] = useState(null);
-  const [iqamaTime, setIqamaTime] = useState(null); // لحساب وقت الإقامة
+  const [iqamaTime, setIqamaTime] = useState(null);
   const [loading, setLoading] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
-  const [currentTime, setCurrentTime] = useState(new Date()); // الوقت الحالي
+  const [currentTime, setCurrentTime] = useState(new Date());
+  const [selectedAdhan, setSelectedAdhan] = useState({
+    Fajr: "اذان (1).mp3",
+    Dhuhr: "اذان (1).mp3",
+    Asr: "اذان (1).mp3",
+    Maghrib: "اذان (1).mp3",
+    Isha: "اذان (1).mp3",
+  });
 
   const fetchPrayerTimes = useCallback(async () => {
     setLoading(true);
@@ -59,7 +68,7 @@ function App() {
         setNextPrayerTime(prayerTime);
 
         const iqama = new Date(prayerTime);
-        iqama.setMinutes(iqama.getMinutes() + 15); // تأخير الإقامة بـ 15 دقيقة
+        iqama.setMinutes(iqama.getMinutes() + 15);
         setIqamaTime(iqama);
 
         break;
@@ -67,44 +76,55 @@ function App() {
     }
   };
 
+  const handleAdhanChange = (prayerName, newAdhan) => {
+    setSelectedAdhan((prevState) => ({
+      ...prevState,
+      [prayerName]: newAdhan,
+    }));
+  };
+
   return (
-    <div className={darkMode ? "dark-mode" : ""}>
-      <header>
-        <h1>تطبيق مواقيت الصلاة</h1>
-        <p>{hijriDate && `التاريخ الهجري: ${hijriDate}`}</p>
-        <button
-          onClick={() => setDarkMode(!darkMode)}
-          className="dark-mode-toggle"
-        >
-          {darkMode ? "الوضع العادي" : "الوضع الليلي"}
-        </button>
-      </header>
+    <Router>
+      <div className={darkMode ? "dark-mode" : ""}>
+        <header>
+          <h1>تطبيق مواقيت الصلاة</h1>
+          <p>{hijriDate && `التاريخ الهجري: ${hijriDate}`}</p>
+          <button
+            onClick={() => setDarkMode(!darkMode)}
+            className="dark-mode-toggle"
+          >
+            {darkMode ? "الوضع العادي" : "الوضع الليلي"}
+          </button>
+        </header>
 
-      <div className="current-time">
-        <p>الوقت الحالي: {currentTime.toLocaleTimeString()}</p>
-        <p>التاريخ الميلادي: {currentTime.toLocaleDateString()}</p>
+        <div className="current-time">
+          <p>الوقت الحالي: {currentTime.toLocaleTimeString()}</p>
+          <p>التاريخ الميلادي: {currentTime.toLocaleDateString()}</p>
+        </div>
+
+        <Routes>
+          <Route
+            path="/"
+            element={
+              loading ? (
+                <p>جاري تحميل مواقيت الصلاة...</p>
+              ) : (
+                <>
+                  <PrayerRow prayerTimes={prayerTimes} />
+                  <Countdown nextPrayerTime={nextPrayerTime} iqamaTime={iqamaTime} />
+                   
+                </>
+              )
+            }
+          />
+          <Route
+            path="/settings/:prayerName"
+            element={<AdhanSettings selectedAdhan={selectedAdhan} onAdhanChange={handleAdhanChange} />}
+          />
+        </Routes>
+        <Footer />
       </div>
-{/*  
-      <Settings
-        city={city}
-        setCity={setCity}
-        country={country}
-        setCountry={setCountry}
-        method={method}
-        setMethod={setMethod}
-      />
-      */}
-
-      {loading ? (
-        <p>جاري تحميل مواقيت الصلاة...</p>
-      ) : (
-        <>
-          <PrayerRow prayerTimes={prayerTimes} /> {/* عرض الصلوات بشكل أفقي  <PrayerTimes prayerTimes={prayerTimes} />*/}
-          <Countdown nextPrayerTime={nextPrayerTime} iqamaTime={iqamaTime} />
-           
-        </>
-      )}
-    </div>
+    </Router>
   );
 }
 
